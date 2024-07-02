@@ -75,9 +75,8 @@ io.use(authenticate).on("connection", (socket) => {
     console.log(`Socket ${socket.id} disconnected`);
   });
 });
-const HOST = "0.0.0.0";
 
-server.listen(process.env.PORT, HOST, () => {
+server.listen(process.env.PORT, () => {
   console.log(`zoo game app backend port : ${process.env.PORT}`);
   startRound(io);
 });
