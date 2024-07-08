@@ -13,6 +13,8 @@ import { onBetPlace, whenSocketJoin } from "./socketHandler.js";
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
+  pingTimeout: 60000, // 1 minute
+  pingInterval: 25000, // 25 seconds
   cors: {
     origin: "*",
     methods: ["GET", "POST"],
@@ -52,9 +54,9 @@ io.use(authenticate).on("connection", (socket) => {
       });
     }
   });
-  socket.on("cancle-particularBet", (amount) => {
+  socket.on("cancleParticularBet", (amount) => {
     playerCoins[socket.userId] += amount;
-    socket.emit("particular-bet-cancled", playerCoins[socket.userId]);
+    socket.emit("particularBetCancled", playerCoins[socket.userId]);
   });
 
   socket.on("bet", async (userBetObject) => {

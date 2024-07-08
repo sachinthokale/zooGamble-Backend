@@ -1,5 +1,7 @@
 import User from "../models/user.js";
 import jwt from "jsonwebtoken";
+import { genrateAccessRefreshTokens } from "../utils/genrateAccessRefreshTokens.js";
+import RefreshToken from "../models/refreshToken.js";
 
 export const setUser = async (req, res) => {
   //   try {
@@ -45,12 +47,17 @@ export const login = async (req, res) => {
         error: "Incorrect Password",
       });
     }
-    const token = jwt.sign({ userId: user.userId }, "lundfakir");
-    console.log(token);
+    // const token = jwt.sign({ userId: user.userId }, "lundfakir");
+    const { accessToken, refreshToken } = genrateAccessRefreshTokens(
+      user.userId
+    );
+    await RefreshToken.create({ userId: user.userId, token: refreshToken });
+
     res.status(200).json({
       message: "Logged in Successfully",
       userId: user.userId,
-      token: token,
+      accessToken,
+      refreshToken,
     });
   } catch (error) {
     res.status(500).json({
