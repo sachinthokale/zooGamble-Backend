@@ -5,7 +5,7 @@ import userRoute from "./routes/userRoute.js";
 import cors from "cors";
 import http from "http";
 import { Server } from "socket.io";
-import authenticate from "./controllers/authenticate.js";
+import authenticate, { validateToken } from "./controllers/authenticate.js";
 import User from "./models/user.js";
 import startRound from "./controllers/startRound.js";
 import { onBetPlace, whenSocketJoin } from "./socketHandler.js";
@@ -28,6 +28,8 @@ app.use(cors());
 dotenv.config();
 connectDb();
 app.use("/user", userRoute);
+app.get("/validate-token", validateToken);
+
 let playerCoins = {};
 
 io.use(authenticate).on("connection", (socket) => {

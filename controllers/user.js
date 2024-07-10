@@ -24,7 +24,6 @@ export const setUser = async (req, res) => {
 export const login = async (req, res) => {
   try {
     const { userId, password } = req.body;
-    console.log(userId, password);
 
     if (!userId || !password) {
       return res.status(400).json({
@@ -37,6 +36,7 @@ export const login = async (req, res) => {
       });
     }
     const user = await User.findOne({ userId: userId });
+    console.log(user);
     if (!user) {
       return res.status(400).json({
         error: "Incorrect userId",
@@ -65,3 +65,5 @@ export const login = async (req, res) => {
     });
   }
 };
+
+export const validateToken = async (req, res) => {};

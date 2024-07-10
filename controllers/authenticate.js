@@ -60,3 +60,33 @@ const authenticate = async (socket, next) => {
 };
 
 export default authenticate;
+
+export const validateToken = async (req, res) => {
+  try {
+    const { authorization: token } = req.headers;
+    if (!token) {
+      return res.status(400).json({
+        valid: false,
+        message: "No token provided",
+      });
+    }
+
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
+      if (err) {
+        return res.status(400).json({
+          valid: false,
+          message: "Token is invalid or expired",
+        });
+      }
+      console.log(decoded);
+      return res.status(200).json({
+        valid: true,
+      });
+    });
+  } catch (error) {
+    return res.status(500).json({
+      valid: false,
+      message: "Internal server error",
+    });
+  }
+};
